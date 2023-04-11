@@ -24,6 +24,6 @@ t1 = A* exp(1i*(omega_0*t + phi));
 t2 = sigma*randn(N,1);
 t3 = 1i*sigma*randn(N,1);
 
-x = A* exp(1i*(omega_0*t + phi)) + sigma*randn(1,N) + 1i*sigma*randn(1,N);
+x = A* exp(1i*(omega_0*t + phi)) + normrnd(0,sigma,N) + 1i*normrnd(0,sigma,N);
 
-plot(abs(x))
+plot(sigma*randn(1,N))
