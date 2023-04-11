@@ -58,4 +58,3 @@ e_phi = phi - phi_hat;
 %% Plot
 
 plot(abs(Y));
-
