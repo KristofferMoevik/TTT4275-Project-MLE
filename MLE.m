@@ -16,7 +16,6 @@ SNR = db2mag(SNR_decibel);
 sigma_square = A^2/2*SNR;
 sigma = sqrt(A^2./(2*SNR));
 
-
 N = 513;
 P = N*(N-1)/2;
 Q = N*(N-1)*(2*N-1)/6;
@@ -26,22 +25,30 @@ k = [10,12,14,16,18,20];
 
 %% Define signal
 
-x = A* exp(1i*(omega_0*t + phi)) + normrnd(0,sigma,1,N) + 1i*normrnd(0,sigma,1,N);
+w_r = normrnd(0,sigma,1,N);
+w_i = 1i*normrnd(0,sigma,1,N);
+
+x = A* exp(1i*(omega_0*t + phi)) + w_r + w_i;
 
 %% Find CRLB
 CRLB_freq = 12*sigma_square / A^2*T^2*N*(N^2-1);
 CRLB_phase = 12*sigma_square*(n_0^2*N+2*n_0*P+Q) / (A^2*N^2*(N^2-1));
 
 %% Fourier transform of x
-M = size(x,2);
+M = 2^k(1);
+x = [x zeros(1,M-size(x,2))];
 Y = fft(x,M);
 [val, m_star] = max(Y);
 
-%% Find omega_hat
-omega_hat = (2*pi*m_star) / (M*T);
+%% Find estimates
 
-%% Find phi_hat
+omega_hat = (2*pi*m_star) / (M*T);
 phi_hat = angle(exp(-1i*omega_hat*n_0*T) * val);
+
+%% Estimation errors
+
+e_omega = omega_0 - omega_hat;
+e_phi = phi - phi_hat;
 
 %% Plot
 
