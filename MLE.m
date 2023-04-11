@@ -11,7 +11,7 @@ omega_0 = 2*pi*f_0;
 phi = pi/8;
 A = 1;
 
-SNR_decibel = 0;
+SNR_decibel = -10;
 SNR = db2mag(SNR_decibel);
 sigma_square = A^2/2*SNR;
 sigma = sqrt(A^2./(2*SNR));
@@ -32,7 +32,17 @@ x = A* exp(1i*(omega_0*t + phi)) + normrnd(0,sigma,1,N) + 1i*normrnd(0,sigma,1,N
 CRLB_freq = 12*sigma_square / A^2*T^2*N*(N^2-1);
 CRLB_phase = 12*sigma_square*(n_0^2*N+2*n_0*P+Q) / (A^2*N^2*(N^2-1));
 
+%% Fourier transform of x
+M = size(x,2);
+Y = fft(x,M);
+[val, m_star] = max(Y);
+
+%% Find omega_hat
+omega_hat = (2*pi*m_star) / (M*T);
+
+%% Find phi_hat
+phi_hat = angle(exp(-1i*omega_hat*n_0*T) * val);
 
 %% Plot
 
-plot(abs(x));
+plot(abs(Y));
