@@ -35,7 +35,7 @@ CRLB_freq = 12*sigma_square / A^2*T^2*N*(N^2-1);
 CRLB_phase = 12*sigma_square*(n_0^2*N+2*n_0*P+Q) / (A^2*N^2*(N^2-1));
 
 %% Fourier transform of x
-M = 2^k(1);
+M = 2^k(6);
 x = [x zeros(1,M-size(x,2))];
 Y = fft(x,M);
 [val, m_star] = max(Y);
