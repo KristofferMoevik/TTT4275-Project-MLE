@@ -1,5 +1,7 @@
-clear all
-close all
+clear all;
+close all;
+
+%% Define parameters
 
 F_s = 10^6;
 T = 10e-6;
