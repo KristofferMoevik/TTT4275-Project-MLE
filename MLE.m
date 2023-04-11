@@ -2,7 +2,7 @@ clear all
 close all
 
 F_s = 10^6;
-T = 1/F_s;
+T = 10e-6;
 
 f_0 = 10^5;
 omega_0 = 2*pi*f_0;
@@ -22,6 +22,6 @@ t1 = A* exp(1i*(omega_0*t + phi));
 t2 = sigma*randn(N,1);
 t3 = 1i*sigma*randn(N,1);
 
-x = A* exp(1i*(omega_0*t + phi)) + sigma*randn(1,N) + 1i*sigma*randn(1,N);
+x = A* exp(1i*(omega_0*t + phi)); %%+ sigma*randn(1,N) + 1i*sigma*randn(1,N);
 
-plot(abs(x))
+plot(real(x))
