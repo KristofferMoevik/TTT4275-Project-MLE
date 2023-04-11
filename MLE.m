@@ -23,7 +23,7 @@ Q = N*(N-1)*(2*N-1)/6;
 n_0 = -P/N;
 t = 0:T:T*(N-1);
 k = [10,12,14,16,18,20];
-M = 2^10;
+M = 2^20;
 
 %% Define signal
 
@@ -43,8 +43,8 @@ Y = fft(x,M);
 omega_hat = (2*pi*m_star) / (M*T);
 
 %% Find phi_hat
-phi_hat = angle(exp(-1i*omega_hat*n_0*T) * val);
+phi_hat = angle(exp(complex(0,-omega_hat*n_0*T)) * val);
 
 %% Plot
 
-plot(abs(Y));
+%plot(abs(Y));
