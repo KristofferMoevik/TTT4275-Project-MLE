@@ -24,4 +24,5 @@ t3 = 1i*sigma*randn(N,1);
 
 x = A* exp(1i*(omega_0*t + phi)); %%+ sigma*randn(1,N) + 1i*sigma*randn(1,N);
 
-plot(real(x))
+plot(real(x)); hold on;
+%plot(imag(x)); hold off;
