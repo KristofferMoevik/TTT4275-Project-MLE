@@ -21,4 +21,3 @@ for i = 1:size(SNR,2)
         [var_e_omega(i,j), var_e_phi(i,j), CRLB_omega(i,j), CRLB_phi(i,j)] = MLE_simulation(N,k(j),SNR(i));
     end
 end
-
