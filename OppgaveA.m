@@ -21,3 +21,16 @@ for i = 1:size(SNR,2)
         [var_e_omega(i,j), var_e_phi(i,j), CRLB_omega(i,j), CRLB_phi(i,j)] = MLE_simulation(N,k(j),SNR(i));
     end
 end
+
+%% Plot
+close all
+h = figure;
+A = axes;
+surfl(k,SNR,var_e_phi); hold on;
+surfl(k,SNR,CRLB_phi); 
+xlabel('k')
+ylabel('SNR')
+zlabel('Phase variance')
+set(A,'ZScale','log')
+colormap pink    % change color map
+%shading interp    % interpolate colors across lines and faces
