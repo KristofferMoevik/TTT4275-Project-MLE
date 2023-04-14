@@ -1,7 +1,6 @@
-clear all;
-close all;
+clear; close all;
 
-%% Define parameters
+%% Define
 
 F_s = 10^6;
 T = 1/F_s;
@@ -13,6 +12,7 @@ A = 1;
 
 SNR_decibel = 20;
 SNR = db2mag(SNR_decibel);
+
 sigma_square = A^2/2*SNR;
 sigma = sqrt(A^2./(2*SNR));
 
@@ -20,53 +20,79 @@ N = 513;
 P = N*(N-1)/2;
 Q = N*(N-1)*(2*N-1)/6;
 n_0 = -P/N;
+
 n = n_0:1:(n_0 + N-1);
 t = 0:T:T*(N-1);
-k = [10,12,14,16,18,20];
 
-%% Find CRLB
-CRLB_freq = 12*sigma_square / A^2*T^2*N*(N^2-1);
-CRLB_phase = 12*sigma_square*(n_0^2*N+2*n_0*P+Q) / (A^2*N^2*(N^2-1));
+k = [10,12,14,16,18,20];
+M = 2^k(3);
 
 sim_steps = 100;
-omega_hat = [];
-phi_hat = [];
-omega_hat = [];
 
-%% Estimation errors
 
-e_omega = [];
-e_phi = [];
-for i=1:sim_steps
-    %% Define signal
+
+%% Simulations
+
+% Pre allocate vectors
+
+omega_MLE = zeros(sim_steps,1);
+phi_MLE = zeros(sim_steps,1);
+error_omega = zeros(sim_steps,1);
+error_phi = zeros(sim_steps,1);
+
+
+for i = 1:sim_steps
+
+    % Create signal x
+
     w_r = normrnd(0,sigma,1,N);
     w_i = 1i*normrnd(0,sigma,1,N);
+    x = A*exp(1i*(omega_0*n*T + phi)) + w_r + w_i;
 
-    x = A* exp(1i*(omega_0*n*T + phi)) + w_r + w_i;
+    % Fourier transform of x
 
-    %% Fourier transform of x
-
-    M = 2^k(6);
-    x = [x zeros(1,M-size(x,2))];
-
+    x = [x zeros(1,M-size(x,2))]; % zero padding
     Y = fft(x,M);
-    %Y = Y .* [ones(1,0.5*M), zeros(1,0.5*M)];
     [val, m_star] = max(Y);
 
-    %% Find estimates
+    % Find estimates and errors
 
-    omega_hat = [omega_hat; (2*pi*m_star) / (M*T)];
-    phi_hat = [phi_hat; angle(exp(-1i*omega_hat(i)*n_0*T) * val)];
-    omega_hat = [omega_hat; (2*pi*m_star) / (T*M)];
+    omega_MLE(i) = (2*pi*m_star) / (M*T);
+    phi_MLE(i) = angle(exp(-1i*omega_MLE(i)*n_0*T));
 
-    %% Estimation errors
+    error_omega(i) = omega_0 - omega_MLE(i);
+    error_phi(i) = phi - phi_MLE(i);
 
-    e_omega = [e_omega; omega_0 - omega_hat(i)];
-    e_phi = [e_phi; phi - phi_hat(i)];
+    % Simulation progress
+
+    if mod(i, sim_steps/100) == 0 && true
+        fprintf('%i%%\n', 100* i/sim_steps)
+    end
+
 end
 
-%% 
+var_error_omega = var(error_omega);
+var_error_phi = var(error_phi);
+
+
+%% CRLB
+
+CRLB_omega = (12 * sigma^2) / A^2 * T^2 * N * (N^2 - 1);
+CRLB_phi = (12 * sigma^2 * (n_0^2 * N + 2 * n_0 * P + Q)) / (A^2 * N^2 * (N^2 - 1));
+
+
 
 %% Plot
 
-plot(abs(e_omega));
+fig1 = figure;
+plot(abs(error_omega));
+grid on;
+xlabel('Steps');
+
+
+%% Functions
+
+
+
+
+
