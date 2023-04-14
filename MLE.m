@@ -32,6 +32,7 @@ w_i = 1i*normrnd(0,sigma,1,N);
 x = A* exp(1i*(omega_0*n*T + phi)) + w_r + w_i;
 
 %% Find CRLB
+
 CRLB_freq = 12*sigma_square / A^2*T^2*N*(N^2-1);
 CRLB_phase = 12*sigma_square*(n_0^2*N+2*n_0*P+Q) / (A^2*N^2*(N^2-1));
 
