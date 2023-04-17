@@ -9,7 +9,7 @@ omega_0 = 2*pi*f_0;
 phi = pi/8;
 A = 1;
 
-SNR_decibel = 10;
+SNR_decibel = 20;
 SNR = db2mag(SNR_decibel);
 
 sigma_square = A^2/(2*SNR);
@@ -24,7 +24,7 @@ n = n_0:1:(n_0 + N-1);
 t = 0:T:T*(N-1);
 
 k = [10,12,14,16,18,20];
-M = 2^k(1);
+M = 2^k(3);
 
 sim_steps = 1000;
 
@@ -51,13 +51,13 @@ for i = 1:sim_steps
     % Fourier transform of x
 
     x = [x zeros(1,M-size(x,2))]; % zero padding
-    Y = fft(x,M);
-    [val, m_star] = max(Y);
+    X = fft(x,M);
+    [val, m_star] = max(abs(X),[],2,'linear');
 
     % Find estimates and errors
 
     omega_MLE(i) = (2 * pi * m_star) / (M * T);
-    phi_MLE(i) = angle(exp(-1i * omega_MLE(i) * n_0 *  T));
+    phi_MLE(i) = angle(exp(-1i * omega_MLE(i) * n_0 *  T) * val);
 
     error_omega(i) = omega_0 - omega_MLE(i);
     error_phi(i) = phi - phi_MLE(i);
@@ -65,7 +65,7 @@ for i = 1:sim_steps
     % Simulation progress
 
     if mod(i, sim_steps/100) == 0 && true
-        fprintf('%i%%\n', 100* i/sim_steps)
+        fprintf('%i%%\n', 100 * i/sim_steps)
     end
 
 end
