@@ -1,4 +1,6 @@
 function [var_e_omega, var_e_phi, CRLB_omega, CRLB_phi] = MLE_simulation(N,k,SNR, sim_steps)
+
+
     F_s = 10^6;
     T = 1/F_s;
     

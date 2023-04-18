@@ -9,7 +9,7 @@ omega_0 = 2*pi*f_0;
 phi = pi/8;
 A = 1;
 
-SNR_decibel = 20;
+SNR_decibel = 0;
 SNR = db2mag(SNR_decibel);
 
 sigma_square = A^2/(2*SNR);
@@ -24,7 +24,7 @@ n = n_0:1:(n_0 + N-1);
 t = 0:T:T*(N-1);
 
 k = [10,12,14,16,18,20];
-M = 2^k(3);
+M = 2^k(1);
 
 sim_steps = 1000;
 
@@ -51,8 +51,8 @@ for i = 1:sim_steps
     % Fourier transform of x
 
     x = [x zeros(1,M-size(x,2))]; % zero padding
-    X = fft(x,M);
-    [val, m_star] = max(abs(X),[],2,'linear');
+    x_fft = fft(x,M);
+    [val, m_star] = max(abs(x_fft),[],2,'linear');
 
     % Find estimates and errors
 
@@ -80,13 +80,6 @@ CRLB_omega = (12 * sigma_square) / (A^2 * T^2 * N * (N^2 - 1));
 CRLB_phi = (12 * sigma_square * (n_0^2 * N + 2 * n_0 * P + Q)) / (A^2 * N^2 * (N^2 - 1));
 
 
-
-%% Plot
-
-fig1 = figure;
-plot(abs(error_omega));
-grid on;
-xlabel('Steps');
 
 
 
