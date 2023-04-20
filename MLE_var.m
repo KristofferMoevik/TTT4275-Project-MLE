@@ -9,7 +9,7 @@ omega_0 = 2*pi*f_0;
 phi = pi/8;
 A = 1;
 
-SNR_decibel = 0;
+SNR_decibel = -10;
 SNR = db2mag(SNR_decibel);
 
 sigma_square = A^2/(2*SNR);

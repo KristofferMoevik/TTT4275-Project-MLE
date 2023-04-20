@@ -27,8 +27,8 @@ function [omega_error_var, phi_error_var] = MLE_error_variance(N, steps, SNR_dB,
     
         % Fourier transform of x
     
-        x = [x zeros(1,M-size(x,2))]; % zero padding of x
-        x_fft = fft(x,M);
+        x_zeropadded = [x zeros(1,M-size(x,2))]; % zero padding of x
+        x_fft = fft(x_zeropadded,M);
         [val, m_star] = max(abs(x_fft),[],2,'linear');
     
         % Find estimates and errors
