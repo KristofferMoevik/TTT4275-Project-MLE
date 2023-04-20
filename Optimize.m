@@ -43,13 +43,15 @@ x_hat = A*exp(1i*(MLE(1)*n*T + MLE(2)));
 
 % Object function
 
-obj_func = norm(x-x_hat);
+obj_func = norm(abs(x-x_hat));
 
 % Find minimum
 
-MLE_opt = fminsearch(@(MLE)obj_func, MLE);
+options = optimset('Display','iter');
 
-fval = norm(x - A*exp(1i*(MLE_opt(1)*n*T + MLE_opt(2))));
+MLE_opt = fminsearch(@(MLE)obj_func, MLE, options);
+
+fval = norm(abs(x - A*exp(1i*(MLE_opt(1)*n*T + MLE_opt(2)))));
 
 %% Print
 
