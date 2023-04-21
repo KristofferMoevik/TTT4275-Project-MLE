@@ -23,7 +23,7 @@ for i = 1:n_k
 end
 legend('CRLB','k = 10','k = 12','k = 14','k = 16','k = 18','k = 20');
 title('Variance of frequency estimation error');
-xlabel('SNR (dB');
+xlabel('SNR (dB)');
 ylabel('Variance');
 
 dims = [200 200 500 300]; % [x_pos, y_pos, x_brd, y_brd]
